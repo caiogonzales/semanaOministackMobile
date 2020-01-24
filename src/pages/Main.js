@@ -11,7 +11,7 @@ function Main({navigation}){
     const [devs, setDevs] = useState([]);
     const[currentRegion, setCurrentRegion] = useState(null)
 
-    const [techs, setTechs] = useState('');
+    const [services, setTechs] = useState('');
 
     useEffect(()=>{
         subscribeToNewDevs(dev => setDevs([...devs, dev]));
@@ -49,7 +49,7 @@ function Main({navigation}){
         connect(
             latitude,
             longitude,
-            techs
+            services
         );
     }
 
@@ -60,7 +60,7 @@ function Main({navigation}){
             params: {
                 latitude,
                 longitude,
-                techs
+                services
             }
         });
         console.log(response.data.devs)
@@ -85,12 +85,17 @@ function Main({navigation}){
 
                 <Callout onPress={() => {
                     //navegacao
-                    navigation.navigate('Profile', { github_username: dev.github_username })
+                    navigation.navigate('Profile', {
+                        name: dev.name,
+                        endereco: dev.endereco,
+                        email: dev.email,
+                        phone: dev.phone,
+                        services: dev.services.join(', '),
+                    })
                 }}>
                     <View style={styles.callout}>
                         <Text style={styles.devName}>{dev.name}</Text>
-                        <Text style={styles.devBio}>{dev.bio}</Text>
-                        <Text style={styles.devTechs}>{dev.techs.join(', ')}</Text>
+                        <Text style={styles.devTechs}>{dev.services.join(', ')}</Text>
                     </View>
                 </Callout>
             </Marker>
@@ -99,11 +104,11 @@ function Main({navigation}){
         <View style={styles.searchForm}>
            <TextInput 
               style={styles.searchInput}
-              placeholder="buscar Devs por Techs..."
+              placeholder="procure por serviço..."
               placeholderTextColor="#999"
-              autoCapitalize="words"
+              autoCapitalize="none"
               autoCorrect={false}
-              value={techs}
+              value={services}
               onChangeText={setTechs}
            />
 
@@ -124,7 +129,8 @@ const styles = StyleSheet.create({
         height: 54,
         borderRadius: 4,
         borderWidth: 4,
-        borderColor: '#fff'
+        borderColor: '#fff',
+        backgroundColor: '#333'
     },
     callout: {
         width: 250,
@@ -169,7 +175,7 @@ const styles = StyleSheet.create({
     loadButton: {
         width: 50,
         height: 50,
-        backgroundColor: "#8e4dff",
+        backgroundColor: "#992c32",
         borderRadius: 25,
         justifyContent: 'center',
         alignItems: 'center',
